@@ -6,50 +6,13 @@
 #include <dt-bindings/input/input.h>
 
 / {
-	compatible = "linksys,re6500", "mediatek,mt7621-soc";
-	model = "Linksys RE6500";
-
-	memory@0 {
-		device_type = "memory";
-		reg = <0x0 0x4000000>;
-	};
+	compatible = "linksys,ea8100", "mediatek,mt7621-soc";
+	model = "Linksys ea8100";
 
 	chosen {
-		bootargs = "console=ttyS0,57600";
+		bootargs = "console=ttyS0,115200";
 	};
 
-	gpio-leds {
-		compatible = "gpio-leds";
-
-		wifi {
-			label = "re6500:orange:wifi";
-			gpios = <&gpio0 0 GPIO_ACTIVE_HIGH>;
-		};
-
-		power {
-			label = "re6500:white:power";
-			gpios = <&gpio0 9 GPIO_ACTIVE_HIGH>;
-		};
-	};
-
-	gpio-keys-polled {
-		compatible = "gpio-keys-polled";
-		#address-cells = <1>;
-		#size-cells = <0>;
-		poll-interval = <20>;
-
-		wps {
-			label = "wps";
-			gpios = <&gpio0 10 GPIO_ACTIVE_LOW>;
-			linux,code = <KEY_WPS_BUTTON>;
-		};
-
-		reset {
-			label = "reset";
-			gpios = <&gpio0 11 GPIO_ACTIVE_HIGH>;
-			linux,code = <KEY_RESTART>;
-		};
-	};
 };
 
 &spi0 {
@@ -65,34 +28,25 @@
 
 		partition@0 {
 			label = "u-boot";
-			reg = <0x0 0x30000>;
+			reg = <0x0 0x80000>;
 			read-only;
 		};
 
-		partition@30000 {
+		partition@80000 {
 			label = "u-boot-env";
-			reg = <0x30000 0x10000>;
+			reg = <0x80000 0x40000>;
 			read-only;
 		};
 
-		factory: partition@40000 {
+		factory: partition@c0000 {
 			label = "factory";
-			reg = <0x40000 0x10000>;
+			reg = <0xc0000 0x30000>;
 			read-only;
 		};
 
-		partition@50000 {
+		partition@180000 {
 			label = "firmware";
-			reg = <0x50000 0x7b0000>;
-		};
-	};
-};
-
-&pinctrl {
-	state_default: pinctrl0 {
-		gpio {
-			ralink,group = "i2c", "uart2", "uart3", "rgmii2";
-			ralink,function = "gpio";
+			reg = <0x180000 0x2800000>;
 		};
 	};
 };
@@ -117,12 +71,4 @@
 			ieee80211-freq-limit = <2400000 2500000>;
 		};
 	};
-};
-
-&ethernet {
-	mtd-mac-address = <&factory 0x2e>;
-};
-
-&xhci {
-	status = "disabled";
 };

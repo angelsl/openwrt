@@ -427,6 +427,13 @@ define Device/re6500
 endef
 TARGET_DEVICES += re6500
 
+define Device/ea8100
+  DTS := EA8100
+  DEVICE_TITLE := Linksys EA8100
+  DEVICE_PACKAGES := kmod-mt76x2 kmod-usb3 uboot-envtools wpad-mini
+endef
+TARGET_DEVICES += ea8100
+
 define Device/sap-g3200u3
   DTS := SAP-G3200U3
   DEVICE_TITLE := STORYLiNK SAP-G3200U3

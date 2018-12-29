@@ -7,7 +7,7 @@
 
 / {
 	compatible = "linksys,ea8100", "mediatek,mt7621-soc";
-	model = "Linksys ea8100";
+	model = "Linksys EA8100";
 
 	chosen {
 		bootargs = "console=ttyS0,115200";
@@ -15,42 +15,58 @@
 
 };
 
-&spi0 {
+&nand {
 	status = "okay";
 
-	m25p80@0 {
-		#address-cells = <1>;
-		#size-cells = <1>;
-		compatible = "jedec,spi-nor";
-		reg = <0>;
-		spi-max-frequency = <10000000>;
-		m25p,chunked-io = <32>;
+	partition@0 {
+		label = "uboot";
+		reg = <0x00000 0x80000>;
+	};
 
-		partition@0 {
-			label = "u-boot";
-			reg = <0x0 0x80000>;
-			read-only;
-		};
+	partition@80000 {
+		label = "uboot_env";
+		reg = <0x80000 0x40000>;
+	};
 
-		partition@80000 {
-			label = "u-boot-env";
-			reg = <0x80000 0x40000>;
-			read-only;
-		};
+	partition@c0000 {
+		label = "factory";
+		reg = <0xc0000 0x40000>;
+	};
 
-		factory: partition@c0000 {
-			label = "factory";
-			reg = <0xc0000 0x30000>;
-			read-only;
-		};
+	partition@100000 {
+		label = "s_env";
+		reg = <0x100000 0x40000>;
+	};
 
-		partition@180000 {
-			label = "firmware";
-			reg = <0x180000 0x2800000>;
-		};
+	partition@140000 {
+		label = "devinfo";
+		reg = <0x140000 0x40000>;
+	};
+
+	partition@180000 {
+		label = "kernel";
+		reg = <0x180000 0x2800000>;
+	};
+
+	partition@580000 {
+		label = "rootfs";
+		reg = <0x580000 0x2400000>;
 	};
 };
 
+&sdhci {
+	status = "okay";
+};
+
+&pinctrl {
+	state_default: pinctrl0 {
+		gpio {
+			ralink,group = "i2c", "uart2", "uart3", "rgmii2", "sdhci";
+			ralink,function = "gpio";
+		};
+	};
+};
+/*
 &pcie {
 	status = "okay";
 
@@ -72,3 +88,4 @@
 		};
 	};
 };
+ */

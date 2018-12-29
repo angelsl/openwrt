@@ -415,6 +415,9 @@ ramips_board_detect() {
 	*"RE350 v1")
 		name="re350-v1"
 		;;
+	*"EA8100")
+		name="ea8100"
+		;;
 	*"RE6500")
 		name="re6500"
 		;;

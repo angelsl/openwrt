@@ -430,7 +430,7 @@ TARGET_DEVICES += re6500
 define Device/ea8100
   DTS := EA8100
   DEVICE_TITLE := Linksys EA8100
-  DEVICE_PACKAGES := kmod-mt76x2 kmod-usb3 uboot-envtools wpad-mini
+  DEVICE_PACKAGES := kmod-usb3 uboot-envtools
 endef
 TARGET_DEVICES += ea8100
 

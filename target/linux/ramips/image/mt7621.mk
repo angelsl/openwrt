@@ -429,8 +429,11 @@ TARGET_DEVICES += re6500
 
 define Device/ea8100
   DTS := EA8100
+  BLOCKSIZE := 128k
   DEVICE_TITLE := Linksys EA8100
   DEVICE_PACKAGES := kmod-usb3 uboot-envtools
+  IMAGE_SIZE := 4096k
+  IMAGE/sysupgrade.bin := append-kernel | check-size $$$$(IMAGE_SIZE) | pad-to $$$$(IMAGE_SIZE) | append-rootfs | pad-rootfs
 endef
 TARGET_DEVICES += ea8100
 

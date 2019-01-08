@@ -48,17 +48,15 @@
 		reg = <0x180000 0x2800000>;
 	};
 
-	/*
 	partition@180000 {
 		label = "kernel";
 		reg = <0x180000 0x2800000>;
 	};
 
 	partition@580000 {
-		label = "rootfs";
+		label = "ubi";
 		reg = <0x580000 0x2400000>;
 	};
-	 */
 };
 
 /*

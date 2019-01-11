@@ -57,6 +57,21 @@
 		label = "ubi";
 		reg = <0x580000 0x2400000>;
 	};
+
+	partition@2980000 {
+		label = "alt_firmware";
+		reg = <0x2980000 0x2800000>;
+	};
+
+	partition@2980000 {
+		label = "alt_kernel";
+		reg = <0x2980000 0x2800000>;
+	};
+
+	partition@2d80000 {
+		label = "alt_ubi";
+		reg = <0x2d80000 0x2400000>;
+	};
 };
 
 /*

@@ -10,13 +10,19 @@
 	model = "Linksys EA8100";
 
 	chosen {
-		bootargs = "console=ttyS0,115200";
+		bootargs = "console=ttyS0,115200n8";
 	};
 
 };
 
 &nand {
 	status = "okay";
+
+	partition@0 {
+		label = "ALL";
+		reg = <0x00000 0x7f80000>;
+		read-only;
+	};
 
 	partition@0 {
 		label = "uboot";
@@ -71,6 +77,18 @@
 	partition@2d80000 {
 		label = "alt_ubi";
 		reg = <0x2d80000 0x2400000>;
+	};
+
+	partition@5180000 {
+		label = "sysdiag";
+		reg = <0x5180000 0x100000>;
+		read-only;
+	};
+
+	partition@5280000 {
+		label = "syscfg";
+		reg = <0x5280000 0x2d00000>;
+		read-only;
 	};
 };
 

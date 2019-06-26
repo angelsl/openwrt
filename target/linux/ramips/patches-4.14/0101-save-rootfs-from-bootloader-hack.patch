@@ -1,10 +1,12 @@
 --- a/arch/mips/ralink/of.c
 +++ b/arch/mips/ralink/of.c
-@@ -67,13 +67,19 @@ static int __init early_init_dt_find_mem
+@@ -67,13 +67,23 @@ static int __init early_init_dt_find_mem
  }
  
  static int chosen_dtb;
 +static int save_root_arg;
++static void *mangle_root_arg_prefix;
++static int mangle_root_arg_prefix_len;
  
  static int __init early_init_dt_find_chosen(unsigned long node, const char *uname,
  				     int depth, void *data)
@@ -16,18 +18,20 @@
 +		if (of_get_flat_dt_prop(node, "save-root-arg", NULL)) {
 +			save_root_arg = 1;
 +		}
++
++		mangle_root_arg_prefix = of_get_flat_dt_prop(node, "mangle-root-arg", &mangle_root_arg_prefix_len);
 +	}
 +
  	return 0;
  }
  
-@@ -98,8 +104,24 @@ void __init plat_mem_setup(void)
+@@ -98,8 +108,41 @@ void __init plat_mem_setup(void)
  	__dt_setup_arch(&__image_dtb);
  
  	of_scan_flat_dt(early_init_dt_find_chosen, NULL);
 -	if (chosen_dtb)
 +	if (chosen_dtb) {
-+		if (save_root_arg) {
++		if (save_root_arg || mangle_root_arg_prefix) {
 +			char *root_arg = strstr(arcs_cmdline, "root=");
 +			char *root_arg_end = root_arg;
 +			if (root_arg) {
@@ -35,8 +39,25 @@
 +				if (root_arg_end) {
 +					*root_arg_end = '\0';
 +				}
-+				strlcat(boot_command_line, " ", COMMAND_LINE_SIZE);
-+				strlcat(boot_command_line, root_arg, COMMAND_LINE_SIZE);
++				if (save_root_arg) {
++					strlcat(boot_command_line, " ", COMMAND_LINE_SIZE);
++					strlcat(boot_command_line, root_arg, COMMAND_LINE_SIZE);
++				}
++				if (mangle_root_arg_prefix) {
++					char *dev_mtdblock = strstr(root_arg, "/dev/mtdblock");
++					if (dev_mtdblock) {
++						char *blockno = dev_mtdblock + 13 /* strlen("/dev/mtdblock") */;
++						strlcat(boot_command_line, " ", COMMAND_LINE_SIZE);
++
++						size_t cmdline_len = strlen(boot_command_line);
++						if (cmdline_len + mangle_root_arg_prefix_len + 1 <= COMMAND_LINE_SIZE) {
++							memcpy(boot_command_line + cmdline_len, mangle_root_arg_prefix, mangle_root_arg_prefix_len);
++							*(boot_command_line + cmdline_len + mangle_root_arg_prefix_len) = '\0';
++						}
++
++						strlcat(boot_command_line, blockno, COMMAND_LINE_SIZE);
++					}
++				}
 +				if (root_arg_end) {
 +					*root_arg_end = ' ';
 +				}

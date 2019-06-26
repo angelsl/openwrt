@@ -10,8 +10,8 @@
 	model = "Linksys EA8100";
 
 	chosen {
-		bootargs = "console=ttyS0,115200n8";
-		save-root-arg;
+		bootargs = "console=ttyS0,115200n8 root=/dev/ubiblock0_0";
+		mangle-root-arg = "ubi.mtd=";
 	};
 
 };

@@ -20,12 +20,6 @@
 	status = "okay";
 
 	partition@0 {
-		label = "ALL";
-		reg = <0x00000 0x7f80000>;
-		read-only;
-	};
-
-	partition@0 {
 		label = "uboot";
 		reg = <0x00000 0x80000>;
 	};

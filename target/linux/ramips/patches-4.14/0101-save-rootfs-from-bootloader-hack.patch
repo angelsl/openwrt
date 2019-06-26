@@ -1,0 +1,49 @@
+--- a/arch/mips/ralink/of.c
++++ b/arch/mips/ralink/of.c
+@@ -67,13 +67,19 @@ static int __init early_init_dt_find_mem
+ }
+ 
+ static int chosen_dtb;
++static int save_root_arg;
+ 
+ static int __init early_init_dt_find_chosen(unsigned long node, const char *uname,
+ 				     int depth, void *data)
+ {
+-	if (depth == 1 && !strcmp(uname, "chosen"))
++	if (depth == 1 && !strcmp(uname, "chosen")) {
+ 		chosen_dtb = 1;
+ 
++		if (of_get_flat_dt_prop(node, "save-root-arg", NULL)) {
++			save_root_arg = 1;
++		}
++	}
++
+ 	return 0;
+ }
+ 
+@@ -98,8 +104,24 @@ void __init plat_mem_setup(void)
+ 	__dt_setup_arch(&__image_dtb);
+ 
+ 	of_scan_flat_dt(early_init_dt_find_chosen, NULL);
+-	if (chosen_dtb)
++	if (chosen_dtb) {
++		if (save_root_arg) {
++			char *root_arg = strstr(arcs_cmdline, "root=");
++			char *root_arg_end = root_arg;
++			if (root_arg) {
++				root_arg_end = strchr(root_arg, ' ');
++				if (root_arg_end) {
++					*root_arg_end = '\0';
++				}
++				strlcat(boot_command_line, " ", COMMAND_LINE_SIZE);
++				strlcat(boot_command_line, root_arg, COMMAND_LINE_SIZE);
++				if (root_arg_end) {
++					*root_arg_end = ' ';
++				}
++			}
++		}
+ 		strlcpy(arcs_cmdline, boot_command_line, COMMAND_LINE_SIZE);
++	}
+ 
+ 	of_scan_flat_dt(early_init_dt_find_memory, NULL);
+ 	if (memory_dtb)

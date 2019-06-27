@@ -5,8 +5,13 @@ START=99
 start() {
 	. /lib/functions.sh
 
-	local board=$(board_name)
-	if [ $board = "sk-wb8" ]; then
+	case $(board_name) in
+	sk-wb8)
 		fw_setenv bootcount 0
-	fi
+		;;
+	ea8100)
+		mtd resetbc s_env || true
+		;;
+	esac
+
 }

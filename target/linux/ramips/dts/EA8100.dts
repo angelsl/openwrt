@@ -9,11 +9,78 @@
 	compatible = "linksys,ea8100", "mediatek,mt7621-soc";
 	model = "Linksys EA8100";
 
+	aliases {
+		led-boot = &led_power;
+		led-failsafe = &led_power;
+		led-running = &led_power;
+		led-upgrade = &led_power;
+	};
+
+	memory@0 {
+		device_type = "memory";
+		reg = <0x0 0x10000000>;
+	};
+
 	chosen {
 		bootargs = "console=ttyS0,115200n8 root=/dev/ubiblock0_0";
 		mangle-root-arg = "ubi.mtd=";
 	};
 
+	leds {
+		compatible = "gpio-leds";
+
+		led_power: power {
+			label = "ea8100:white:power";
+			gpios = <&gpio0 10 GPIO_ACTIVE_HIGH>;
+		};
+
+		wps {
+			label = "ea8100:green:wps";
+			gpios = <&gpio0 5 GPIO_ACTIVE_HIGH>;
+		};
+
+		wan {
+			label = "ea8100:green:wan";
+			gpios = <&gpio0 7 GPIO_ACTIVE_LOW>;
+		};
+
+		lan1 {
+			label = "ea8100:green:lan1";
+			gpios = <&gpio0 3 GPIO_ACTIVE_LOW>;
+		};
+
+		lan2 {
+			label = "ea8100:green:lan2";
+			gpios = <&gpio0 18 GPIO_ACTIVE_LOW>;
+		};
+
+		lan3 {
+			label = "ea8100:green:lan3";
+			gpios = <&gpio0 13 GPIO_ACTIVE_LOW>;
+		};
+
+		lan4 {
+			label = "ea8100:green:lan4";
+			gpios = <&gpio0 15 GPIO_ACTIVE_LOW>;
+		};
+	};
+
+	keys {
+		compatible = "gpio-keys";
+		/* poll-interval = <20>; */
+
+		wps {
+			label = "wps";
+			gpios = <&gpio0 17 GPIO_ACTIVE_LOW>;
+			linux,code = <KEY_WPS_BUTTON>;
+		};
+
+		reset {
+			label = "reset";
+			gpios = <&gpio0 12 GPIO_ACTIVE_LOW>;
+			linux,code = <KEY_RESTART>;
+		};
+	};
 };
 
 &nand {
@@ -77,16 +144,10 @@
 	};
 };
 
-/*
-&sdhci {
-	status = "okay";
-};
- */
-
 &pinctrl {
 	state_default: pinctrl0 {
 		gpio {
-			ralink,group = "i2c", "uart2", "uart3", "rgmii2", "sdhci";
+			ralink,group = "i2c", "uart2", "uart3", "jtag", "wdt";
 			ralink,function = "gpio";
 		};
 	};

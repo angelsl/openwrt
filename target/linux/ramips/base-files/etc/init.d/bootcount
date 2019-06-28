@@ -9,7 +9,7 @@ start() {
 	sk-wb8)
 		fw_setenv bootcount 0
 		;;
-	ea8100)
+	linksys,ea8100)
 		mtd resetbc s_env || true
 		;;
 	esac

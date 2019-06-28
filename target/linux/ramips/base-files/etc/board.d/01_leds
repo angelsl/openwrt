@@ -167,7 +167,7 @@ dlink,dwr-922-e2)
 dir-860l-b1)
 	ucidef_set_led_netdev "wan" "wan" "$boardname:green:net" "eth0.2"
 	;;
-ea8100)
+linksys,ea8100)
 	ucidef_set_led_switch "wan" "wan" "$boardname:green:wan" "switch0" "0x01" "" "link"
 	ucidef_set_led_switch "lan1" "lan1" "$boardname:green:lan1" "switch0" "0x02" "" "link"
 	ucidef_set_led_switch "lan2" "lan2" "$boardname:green:lan2" "switch0" "0x04" "" "link"

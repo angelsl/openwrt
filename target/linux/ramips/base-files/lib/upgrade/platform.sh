@@ -52,7 +52,7 @@ platform_do_upgrade() {
 		MTD_ARGS="-t romfile"
 		default_do_upgrade "$ARGV"
 		;;
-	ea8100)
+	linksys,ea8100)
 		platform_do_upgrade_linksys "$ARGV"
 		;;
 	*)

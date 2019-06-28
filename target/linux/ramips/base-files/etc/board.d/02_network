@@ -233,6 +233,7 @@ ramips_setup_interfaces()
 	jhr-n805r|\
 	jhr-n825r|\
 	jhr-n926r|\
+	linksys,ea8100|\
 	mikrotik,rb750gr3|\
 	mikrotik,rbm33g|\
 	mzk-wdpr|\
@@ -389,10 +390,6 @@ ramips_setup_interfaces()
 	re350-v1)
 		ucidef_add_switch "switch0" \
 			"0:lan" "6@eth0"
-		;;
-	ea8100)
-		ucidef_add_switch "switch0" \
-			"0:wan" "1:lan:1" "2:lan:2" "3:lan:3" "4:lan:4" "6@eth0"
 		;;
 	re6500)
 		ucidef_add_switch "switch0" \
@@ -564,10 +561,6 @@ ramips_setup_macs()
 	e1700)
 		wan_mac=$(mtd_get_mac_ascii config WAN_MAC_ADDR)
 		;;
-	ea8100)
-		wan_mac=$(mtd_get_mac_ascii devinfo hw_mac_addr)
-		lan_mac=$wan_mac
-		;;
 	edimax,br-6478ac-v2)
 		lan_mac=$(cat /sys/class/net/eth0/address)
 		wan_mac=$(macaddr_add "$lan_mac" 2)
@@ -606,6 +599,10 @@ ramips_setup_macs()
 	linkits7688)
 		wan_mac=$(mtd_get_mac_binary factory 4)
 		lan_mac=$(mtd_get_mac_binary factory 46)
+		;;
+	linksys,ea8100)
+		wan_mac=$(mtd_get_mac_ascii devinfo hw_mac_addr)
+		lan_mac=$wan_mac
 		;;
 	mac1200rv2)
 		lan_mac=$(mtd_get_mac_binary factory_info 13)

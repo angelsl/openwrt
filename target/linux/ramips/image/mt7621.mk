@@ -434,9 +434,12 @@ define Device/ea8100
   BLOCKSIZE := 128k
   FILESYSTEMS := squashfs
   DEVICE_TITLE := Linksys EA8100
-  DEVICE_PACKAGES := kmod-mt7615e kmod-usb3 uboot-envtools kmod-usb-storage
-  IMAGE_SIZE := 4096k
-  IMAGE/sysupgrade.bin := append-kernel | check-size $$$$(IMAGE_SIZE) | pad-to $$$$(IMAGE_SIZE) | append-ubi
+  DEVICE_PACKAGES := kmod-mt7615e wpad-basic kmod-usb3 uboot-envtools kmod-usb-storage
+  IMAGE_SIZE := 40960k
+  KERNEL_SIZE := 4096k
+  IMAGES += factory.bin
+  IMAGE/sysupgrade.bin := sysupgrade-tar | append-metadata
+  IMAGE/factory.bin := append-kernel | pad-to $$$$(KERNEL_SIZE) | append-ubi | linksys-image type=EA8100
 endef
 TARGET_DEVICES += ea8100
 

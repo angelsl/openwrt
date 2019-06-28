@@ -436,7 +436,7 @@ define Device/ea8100
   DEVICE_TITLE := Linksys EA8100
   DEVICE_PACKAGES := kmod-mt7615e kmod-usb3 uboot-envtools kmod-usb-storage
   IMAGE_SIZE := 4096k
-  IMAGE/sysupgrade.bin := append-kernel | check-size $$$$(IMAGE_SIZE) | pad-to $$$$(IMAGE_SIZE) | append-ubi | linksys-sig
+  IMAGE/sysupgrade.bin := append-kernel | check-size $$$$(IMAGE_SIZE) | pad-to $$$$(IMAGE_SIZE) | append-ubi
 endef
 TARGET_DEVICES += ea8100
 
